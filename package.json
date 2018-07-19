@@ -4,12 +4,21 @@
   "description": "Webhook to communicate with Dialogflow agent",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FedericoCozziVM/movieHint-webhook.git"
+    "url": "https://github.com/FedericoCozziVM/movieHint-webhook.git"
   },
+  "keywords": [
+    "movies",
+    "api",
+    "FedericoCozziVM",
+    "ChatBot",
+    "Dialogflow",
+    "tvseries"
+  ],
   "author": "FedericoCozziVM",
   "license": "ISC",
   "bugs": {

@@ -1,0 +1,14 @@
+
+{
+    "name": "moviehint-webhook",
+    "description": "Webhook to communicate with Dialogflow agent",
+    "repository": "https://github.com/SiddAjmera/NewsAPIForChatfuel.git",
+    "keywords": [
+        "movies",
+        "api",
+        "FedericoCozziVM",
+        "ChatBot",
+        "Dialogflow",
+        "tvseries"
+    ]
+}
