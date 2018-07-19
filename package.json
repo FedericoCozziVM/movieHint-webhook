@@ -1,0 +1,23 @@
+{
+  "name": "moviehint-webhook",
+  "version": "1.0.0",
+  "description": "Webhook to communicate with Dialogflow agent",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FedericoCozziVM/movieHint-webhook.git"
+  },
+  "author": "FedericoCozziVM",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FedericoCozziVM/movieHint-webhook/issues"
+  },
+  "homepage": "https://github.com/FedericoCozziVM/movieHint-webhook#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3"
+  }
+}
