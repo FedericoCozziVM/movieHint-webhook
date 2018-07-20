@@ -133,10 +133,12 @@ restService.post("/userQuery", function(req, res) {
           for(i in genresStuct){
             if(genresStuct[i].name == queryGenre){
               q = genresStuct[i].id;
+              break;
             }
           }
+          console.log(q);
         }
-        page = Math.floor(Math.random() * 1000);
+        page = Math.floor(Math.random() * 10);
         reqUrl = encodeURI("https://api.themoviedb.org/3/discover/movie?api_key="+ APItmdb +"&language=it&sort_by=popularity.desc&include_adult=false&include_video=false&page="+page+"&with_genres="+q);
         https.get(reqUrl, (responseFromAPI) => {
           let completeResponse = '';
