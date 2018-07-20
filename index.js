@@ -38,6 +38,7 @@ restService.post("/userQuery", function(req, res) {
     switch(action){
 
       case "get-a-random-movie": 
+      
         const page = Math.floor(Math.random() * 1000);
         console.log(page);
         const reqUrl = encodeURI("https://api.themoviedb.org/3/discover/movie?api_key="+ APItmdb +"&language=it&sort_by=popularity.desc&include_adult=false&include_video=false&page="+page);
@@ -111,30 +112,4 @@ restService.listen(process.env.PORT || 8000, function() {
   console.log("Server up and listening");
 });
 
-
-function getARandomMovie(){
-  //return "I'll get a random movie";
-  var sp = "";
-
-  const reqUrl = encodeURI("https://api.themoviedb.org/3/discover/movie?api_key="+ APItmdb +"&language=it&sort_by=popularity.desc&include_adult=false&include_video=false");
-  https.get(reqUrl, (responseFromAPI) => {
-    let completeResponse = '';
-    responseFromAPI.on('data', (chunk) =>{
-      completeResponse += chunk;
-    });
-    responseFromAPI.on('end', () =>{
-      
-      const movieList = JSON.parse(completeResponse);
-      const index = 3;
-      console.log(movieList.results[3].title);
-      const nomeFilm = ""+ movieList.results[3].title;
-      sp += JSON.stringify(movieList.results[3].title);
-      return sp;
-    });
-  }, (error) => {
-    return "Errore nella chiamata";
-  });
-
-
-}
 
