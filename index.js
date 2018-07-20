@@ -42,8 +42,10 @@ restService.post("/userQuery", function(req, res) {
   var page, index;
   var reqUrl;
   var movieList;
-  var nomeFilm, dataFilm, posterPath;
+  var genresMovieList;
+  var nomeFilm, dataFilm, posterPath, generiFilm;
   var queryGenre;
+  var i,j;
 
   if(req.body.queryResult && req.body.queryResult.action){
     action = req.body.queryResult.action;
@@ -67,6 +69,16 @@ restService.post("/userQuery", function(req, res) {
             nomeFilm = ""+ movieList.results[index].title;
             dataFilm = ""+ movieList.results[index].release_date;
             posterPath = "https://image.tmdb.org/t/p/w185"+ movieList.results[index].poster_path;
+            genresMovieList = movieList.results[index].genre_ids;
+            generiFilm = "";
+
+            for(i in genresMovieList){
+              for(j in genresStuct){
+                if(genresMovieList[i] == genresStuct[j].id){
+                  generiFilm += (genresStuct[j].name +" ");
+                }
+              }
+            } 
 
             return res.json({
               fulfillmentText: "Potresti guardare questo film",
@@ -77,7 +89,7 @@ restService.post("/userQuery", function(req, res) {
                 {
                   card:{
                     title: nomeFilm,
-                    subtitle: "Data di uscita: "+ dataFilm,
+                    subtitle: "Genere: "+generiFilm,
                     imageUri: posterPath
                   }
                 },
@@ -98,7 +110,7 @@ restService.post("/userQuery", function(req, res) {
                       {
                         basicCard: {
                           title: nomeFilm,
-                          subtitle: "Data di uscita: "+dataFilm,
+                          subtitle: "Genere: "+generiFilm,
                           image:{
                             url: posterPath,
                             accessibilityText: "Poster del film"
@@ -129,7 +141,7 @@ restService.post("/userQuery", function(req, res) {
 
         if(req.body.queryResult.parameters && req.body.queryResult.parameters.movieGenre){
           queryGenre = req.body.queryResult.parameters.movieGenre;
-          var q, i;
+          var q;
           for(i in genresStuct){
             if(genresStuct[i].name == queryGenre){
               q = genresStuct[i].id;
@@ -152,6 +164,16 @@ restService.post("/userQuery", function(req, res) {
             nomeFilm = ""+ movieList.results[index].title;
             dataFilm = ""+ movieList.results[index].release_date;
             posterPath = "https://image.tmdb.org/t/p/w185"+ movieList.results[index].poster_path;
+            genresMovieList = movieList.results[index].genre_ids;
+            generiFilm = "";
+
+            for(i in genresMovieList){
+              for(j in genresStuct){
+                if(genresMovieList[i] == genresStuct[j].id){
+                  generiFilm += (genresStuct[j].name +" ");
+                }
+              }
+            }                
 
             return res.json({
               fulfillmentText: "Potresti guardare questo film",
@@ -162,7 +184,7 @@ restService.post("/userQuery", function(req, res) {
                 {
                   card:{
                     title: nomeFilm,
-                    subtitle: "Data di uscita: "+ dataFilm,
+                    subtitle: "Genere: "+generiFilm,
                     imageUri: posterPath
                   }
                 },
@@ -183,7 +205,7 @@ restService.post("/userQuery", function(req, res) {
                       {
                         basicCard: {
                           title: nomeFilm,
-                          subtitle: "Data di uscita: "+dataFilm,
+                          subtitle: "Genere: "+generiFilm,
                           image:{
                             url: posterPath,
                             accessibilityText: "Poster del film"
