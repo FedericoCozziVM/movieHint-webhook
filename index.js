@@ -65,8 +65,8 @@ function getARandomMovie(){
     });
     responseFromAPI.on('end', () =>{
       const movieList = JSON.parse(completeResponse);
-      var index = 3;
-      var nomeFilm = ""+ movieList.results[3].title;
+      const index = 3;
+      const nomeFilm = ""+ movieList.results[3].title;
       return nomeFilm;
     });
   }, (error) => {
