@@ -38,7 +38,7 @@ restService.post("/userQuery", function(req, res) {
     switch(action){
 
       case "get-a-random-movie": 
-      
+
         const page = Math.floor(Math.random() * 1000);
         console.log(page);
         const reqUrl = encodeURI("https://api.themoviedb.org/3/discover/movie?api_key="+ APItmdb +"&language=it&sort_by=popularity.desc&include_adult=false&include_video=false&page="+page);
@@ -59,11 +59,19 @@ restService.post("/userQuery", function(req, res) {
               fulfillmentText: "Potresti guardare questo film",
               fulfillmentMessages: [
                 {
+                  speech: "Ti consiglio questo film",
+                  type: 0
+                },
+                {
                   card:{
                     title: nomeFilm,
                     subtitle: "Data di uscita: "+ dataFilm,
                     imageUri: posterPath
                   }
+                },
+                {
+                  speech: "Può andare bene?",
+                  type: 0
                 }
               ],
               source: "moviehint-webhook",
