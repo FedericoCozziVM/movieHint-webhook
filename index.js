@@ -91,6 +91,11 @@ restService.post("/userQuery", function(req, res) {
                             accessibilityText: "Poster del film"
                           }
                         }
+                      },
+                      {
+                        simpleResponse: {
+                          textToSpeech: "Può andare bene?"
+                        }
                       }
                     ]
                   }
