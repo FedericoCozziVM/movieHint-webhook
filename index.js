@@ -129,7 +129,7 @@ restService.post("/userQuery", function(req, res) {
 
         if(req.body.queryResult.parameters && req.body.queryResult.parameters.movieGenre){
           queryGenre = req.body.queryResult.parameters.movieGenre;
-          var q;
+          var q, i;
           for(i in genresStuct){
             if(genresStuct[i].name == queryGenre){
               q = genresStuct[i].id;
