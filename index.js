@@ -59,12 +59,16 @@ function getARandomMovie(){
 
   const reqUrl = encodeURI("https://api.themoviedb.org/3/discover/movie?api_key="+ APItmdb +"&language=it&sort_by=popularity.desc&include_adult=false&include_video=false");
   http.get(reqUrl, (responseFromAPI) => {
-    let completeResponse = '';
+    let completeResponse = "";
     responseFromAPI.on('data', (chunk) =>{
       completeResponse += chunk;
     });
     responseFromAPI.on('end', () =>{
-      return ""+completeResponse;
+      const movieList = JSON.parse(completeResponse);
+      var index = 3;
+      var nomeFilm = ""+ movieList.results[3].title;
+      return nomeFilm;
+    });
   }, (error) => {
     return "Errore nella chiamata";
   });
