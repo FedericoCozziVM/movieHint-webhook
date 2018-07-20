@@ -72,7 +72,7 @@ restService.post("/userQuery", function(req, res) {
                     items: [
                       {
                         simpleResponse: {
-                          textToSpeech: nomeFilm
+                          textToSpeech: "Potresti guardare il film "+nomeFilm
                         }
                       },
                       {
