@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const restService = express();
 
 const APItmdb = "775245f5d713d40f4c3ed281f88e412b";
-const http = require("http");
+const https = require("https");
 
 restService.use(
   bodyParser.urlencoded({
@@ -36,17 +36,41 @@ restService.post("/userQuery", function(req, res) {
   if(req.body.queryResult && req.body.queryResult.action){
     action = req.body.queryResult.action;
     switch(action){
-      case "get-a-random-movie": speech = getARandomMovie(); break;
+
+      case "get-a-random-movie": 
+        const page = Math.floor(Math.random() * 1000);
+        console.log(page);
+        const reqUrl = encodeURI("https://api.themoviedb.org/3/discover/movie?api_key="+ APItmdb +"&language=it&sort_by=popularity.desc&include_adult=false&include_video=false&page="+page);
+        https.get(reqUrl, (responseFromAPI) => {
+          let completeResponse = '';
+          responseFromAPI.on('data', (chunk) =>{
+            completeResponse += chunk;
+          });
+          responseFromAPI.on('end', () =>{
+            
+            const movieList = JSON.parse(completeResponse);
+            const index = Math.floor(Math.random() * 19);
+            const nomeFilm = ""+ movieList.results[index].title;
+            speech = nomeFilm;
+            return res.json({
+              fulfillmentText: speech,
+              source: "moviehint-webhook"
+            });
+          });
+        }, (error) => {
+          speech = "Some error occurred";
+          return res.json({
+            fulfillmentText: speech,
+            source: "moviehint-webhook"
+          });
+        });
+
+        break;
+
       default: speech = "Action unknown";
     }
 
-  }else{
-    speech = "Missing action";
   }
-  return res.json({
-    fulfillmentText: speech,
-    source: "moviehint-webhook"
-  });
 });
 
 restService.listen(process.env.PORT || 8000, function() {
@@ -56,18 +80,22 @@ restService.listen(process.env.PORT || 8000, function() {
 
 function getARandomMovie(){
   //return "I'll get a random movie";
+  var sp = "";
 
   const reqUrl = encodeURI("https://api.themoviedb.org/3/discover/movie?api_key="+ APItmdb +"&language=it&sort_by=popularity.desc&include_adult=false&include_video=false");
-  http.get(reqUrl, (responseFromAPI) => {
-    let completeResponse = "";
+  https.get(reqUrl, (responseFromAPI) => {
+    let completeResponse = '';
     responseFromAPI.on('data', (chunk) =>{
       completeResponse += chunk;
     });
     responseFromAPI.on('end', () =>{
+      
       const movieList = JSON.parse(completeResponse);
       const index = 3;
+      console.log(movieList.results[3].title);
       const nomeFilm = ""+ movieList.results[3].title;
-      return nomeFilm;
+      sp += JSON.stringify(movieList.results[3].title);
+      return sp;
     });
   }, (error) => {
     return "Errore nella chiamata";
@@ -75,3 +103,4 @@ function getARandomMovie(){
 
 
 }
+
