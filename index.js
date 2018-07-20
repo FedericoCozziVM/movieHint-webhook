@@ -64,11 +64,7 @@ function getARandomMovie(){
       completeResponse += chunk;
     });
     responseFromAPI.on('end', () =>{
-      const movieList = JSON.parse(completeResponse);
-      var index = 3;
-      var nomeFilm = ""+ movieList.results[index].title;
-      return nomeFilm;
-    });
+      return completeResponse;
   }, (error) => {
     return "Errore nella chiamata";
   });
