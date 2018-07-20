@@ -26,6 +26,19 @@ restService.post("/echo", function(req, res) {
   });
 });
 
+restService.post("/userQuery", function(req, res) {
+  var speech =
+    req.body.queryResult &&
+    req.body.queryResult.parameters &&
+    req.body.queryResult.parameters.echoText
+      ? req.body.queryResult.parameters.echoText
+      : "Seems like some problem. Speak again.";
+  return res.json({
+    fulfillmentText: speech,
+    source: "moviehint-webhook"
+  });
+});
+
 restService.listen(process.env.PORT || 8000, function() {
   console.log("Server up and listening");
 });
