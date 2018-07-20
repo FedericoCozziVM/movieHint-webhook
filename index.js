@@ -55,7 +55,7 @@ restService.listen(process.env.PORT || 8000, function() {
 
 
 function getARandomMovie(){
-  return "I'll get a random movie";
+  //return "I'll get a random movie";
 
   const reqUrl = encodeURI("https://api.themoviedb.org/3/discover/movie?api_key="+ APItmdb +"&language=it&sort_by=popularity.desc&include_adult=false&include_video=false");
   http.get(reqUrl, (responseFromAPI) => {
