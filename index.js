@@ -26,19 +26,6 @@ restService.post("/echo", function(req, res) {
   });
 });
 
-restService.post("/query", function(req, res)){
-	var action =
-    req.body.queryResult &&
-    req.body.queryResult.action
-      ? req.body.queryResult.action
-      : "C'è qualche problema, parla ancora";
-
-	return res.json({
-		fulfillmentText: speech, 
-		source: "moviehint-webhook"
-	});
-}
-
 restService.listen(process.env.PORT || 8000, function() {
   console.log("Server up and listening");
 });
