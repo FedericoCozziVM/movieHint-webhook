@@ -51,9 +51,20 @@ restService.post("/userQuery", function(req, res) {
             const movieList = JSON.parse(completeResponse);
             const index = Math.floor(Math.random() * 19);
             const nomeFilm = ""+ movieList.results[index].title;
+            const dataFilm = ""+ movieList.results[index].release_date;
+            const posterPath = "https://image.tmdb.org/t/p/w185"+ movieList.results[index].poster_path;
             speech = nomeFilm;
             return res.json({
-              fulfillmentText: speech,
+              fulfillmentText: "Potresti guardare questo film",
+              fulfillmentMessages: [
+                {
+                  card:{
+                    title: nomeFilm,
+                    subtitle: "Data di uscita: "+ dataFilm,
+                    imageUri: posterPath
+                  }
+                }
+              ],
               source: "moviehint-webhook"
             });
           });
