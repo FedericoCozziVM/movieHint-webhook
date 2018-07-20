@@ -39,7 +39,7 @@ restService.post("/userQuery", function(req, res) {
   if(req.body.queryResult && req.body.queryResult.action){
     action = req.body.queryResult.action;
     switch(action){
-      case "get-a-random-movie": speech = "I'll get a random movie"; break;
+      case "get-a-random-movie": speech = getARandomMovie(); break;
       default: speech = "Action unknown";
     }
 
@@ -55,3 +55,8 @@ restService.post("/userQuery", function(req, res) {
 restService.listen(process.env.PORT || 8000, function() {
   console.log("Server up and listening");
 });
+
+
+function getARandomMovie(){
+  return "I'll get a random movie";
+}
