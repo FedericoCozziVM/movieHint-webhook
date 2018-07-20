@@ -27,12 +27,19 @@ restService.post("/echo", function(req, res) {
 });
 
 restService.post("/userQuery", function(req, res) {
-  var speech =
+  /*var speech =
     req.body.queryResult &&
     req.body.queryResult.parameters &&
     req.body.queryResult.parameters.echoText
       ? req.body.queryResult.parameters.echoText
       : "Seems like some problem. Speak again.";
+  */
+  var speech;
+  if(req.body.queryResult && req.body.queryResult.action){
+    speech = req.body.queryResult.action;
+  }else{
+    speech = "Missing action";
+  }
   return res.json({
     fulfillmentText: speech,
     source: "moviehint-webhook"
