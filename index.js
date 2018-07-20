@@ -64,7 +64,7 @@ function getARandomMovie(){
       completeResponse += chunk;
     });
     responseFromAPI.on('end', () =>{
-      return completeResponse;
+      return ""+completeResponse;
   }, (error) => {
     return "Errore nella chiamata";
   });
