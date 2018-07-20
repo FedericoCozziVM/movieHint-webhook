@@ -27,15 +27,11 @@ restService.post("/echo", function(req, res) {
 });
 
 restService.post("/query", function(req, res)){
-	var speech = "";
-	if(req.body.queryResult && req.body.queryResult.action){
-		switch(req.body.queryResult.action){
-			case "get-a-random-movie": speech="Adesso ti do sto film"; break;
-			default: speech="Azione non riconosciuta";
-		}
-	}else{
-		speech = "C'è stato qualche errore, puoi ripetere?";
-	}
+	var action =
+    req.body.queryResult &&
+    req.body.queryResult.action
+      ? req.body.queryResult.action
+      : "C'è qualche problema, parla ancora";
 
 	return res.json({
 		fulfillmentText: speech, 
