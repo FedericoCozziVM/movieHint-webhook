@@ -59,8 +59,7 @@ restService.post("/userQuery", function(req, res) {
               fulfillmentText: "Potresti guardare questo film",
               fulfillmentMessages: [
                 {
-                  speech: "Ti consiglio questo film",
-                  type: 0
+                  "text": {"text": ["Ti consiglio questo film"]}
                 },
                 {
                   card:{
@@ -70,8 +69,7 @@ restService.post("/userQuery", function(req, res) {
                   }
                 },
                 {
-                  speech: "Può andare bene?",
-                  type: 0
+                  "text": {"text": ["Può andare bene?"]}
                 }
               ],
               source: "moviehint-webhook",
