@@ -65,7 +65,30 @@ restService.post("/userQuery", function(req, res) {
                   }
                 }
               ],
-              source: "moviehint-webhook"
+              source: "moviehint-webhook",
+              payload: {
+                google: {
+                  richResponse: {
+                    items: [
+                      {
+                        simpleResponse: {
+                          textToSpeech: nomeFilm
+                        }
+                      },
+                      {
+                        basicCard: {
+                          title: nomeFilm,
+                          subtitle: "Data di uscita: "+dataFilm,
+                          image:{
+                            url: posterPath,
+                            accessibilityText: "Poster del film"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
             });
           });
         }, (error) => {
