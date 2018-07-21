@@ -139,7 +139,7 @@ restService.post("/userQuery", function(req, res) {
 
       case "get-a-genre-random-movie": 
 
-        if(req.body.queryResult.parameters && req.body.queryResult.parameters.movieGenre){
+        /*if(req.body.queryResult.parameters && req.body.queryResult.parameters.movieGenre){
           queryGenre = req.body.queryResult.parameters.movieGenre;
           var q;
           for(i in genresStuct){
@@ -148,7 +148,36 @@ restService.post("/userQuery", function(req, res) {
               break;
             }
           }
-          console.log(q);
+        }*/
+        if(req.body.queryResult.parameters){
+          if(req.body.queryResult.parameters.movieGenre){
+            queryGenre = req.body.queryResult.parameters.movieGenre;
+            var q;
+            for(i in genresStuct){
+              if(genresStuct[i].name == queryGenre){
+                q = genresStuct[i].id;
+                break;
+              }
+            }
+          }else{
+            if(req.body.queryResult.outputContexts){
+              var contexts = req.body.queryResult.outputContexts;
+              var c;
+              for(c in contexts){
+                if(contexts[c].parameters.movieGenre){
+                  queryGenre = contexts[c].parameters.movieGenre;
+                  for(i in genresStuct){
+                    if(genresStuct[i].name == queryGenre){
+                      q = genresStuct[i].id;
+                      break;
+                    }
+                  }
+                  console.log("Found context genre "+queryGenre);
+                  break;
+                }
+              }
+            }
+          }
         }
         page = Math.floor(Math.random() * 10);
         reqUrl = encodeURI("https://api.themoviedb.org/3/discover/movie?api_key="+ APItmdb +"&language=it&sort_by=popularity.desc&include_adult=false&include_video=false&page="+page+"&with_genres="+q);
@@ -234,7 +263,12 @@ restService.post("/userQuery", function(req, res) {
 
       
 
-      default: speech = "Action unknown";
+      default: 
+        speech = "Action unknown";
+        return res.json({
+          fulfillmentText: speech,
+          source: "moviehint-webhook"
+        });
     }
 
   }
