@@ -39,7 +39,7 @@ restService.post("/userQuery", function(req, res) {
   
   var speech;
   var action;
-  var page, index;
+  var page, index, maxIndex;
   var reqUrl;
   var movieList;
   var genresMovieList;
@@ -54,7 +54,7 @@ restService.post("/userQuery", function(req, res) {
 
       case "get-a-random-movie": 
 
-        page = Math.floor(Math.random() * 1000);
+        page = Math.floor(Math.random() * 999)+1;
         console.log(page);
         reqUrl = encodeURI("https://api.themoviedb.org/3/discover/movie?api_key="+ APItmdb +"&language=it&sort_by=popularity.desc&include_adult=false&include_video=false&page="+page);
         https.get(reqUrl, (responseFromAPI) => {
@@ -65,7 +65,9 @@ restService.post("/userQuery", function(req, res) {
           responseFromAPI.on('end', () =>{
             
             movieList = JSON.parse(completeResponse);
-            index = Math.floor(Math.random() * 19);
+            maxIndex = movieList.results.length -1;
+            index = Math.floor(Math.random() * maxIndex);
+            console.log("page "+page+", index "+index+" of tot "+maxIndex);
             nomeFilm = ""+ movieList.results[index].title;
             dataFilm = ""+ movieList.results[index].release_date;
             posterPath = "https://image.tmdb.org/t/p/w185"+ movieList.results[index].poster_path;
@@ -179,7 +181,7 @@ restService.post("/userQuery", function(req, res) {
             }
           }
         }
-        page = Math.floor(Math.random() * 10);
+        page = Math.floor(Math.random() * 9)+1;
         reqUrl = encodeURI("https://api.themoviedb.org/3/discover/movie?api_key="+ APItmdb +"&language=it&sort_by=popularity.desc&include_adult=false&include_video=false&page="+page+"&with_genres="+q);
         https.get(reqUrl, (responseFromAPI) => {
           let completeResponse = '';
@@ -189,7 +191,9 @@ restService.post("/userQuery", function(req, res) {
           responseFromAPI.on('end', () =>{
             
             movieList = JSON.parse(completeResponse);
-            index = Math.floor(Math.random() * 19);
+            maxIndex = movieList.results.length -1;
+            index = Math.floor(Math.random() * maxIndex);
+            console.log("page "+page+", index "+index+" of tot "+maxIndex);
             nomeFilm = ""+ movieList.results[index].title;
             dataFilm = ""+ movieList.results[index].release_date;
             posterPath = "https://image.tmdb.org/t/p/w185"+ movieList.results[index].poster_path;
