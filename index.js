@@ -21,6 +21,7 @@ restService.use(
 
 restService.use(bodyParser.json());
 
+/*
 restService.post("/echo", function(req, res) {
   var speech =
     req.body.queryResult &&
@@ -35,7 +36,7 @@ restService.post("/echo", function(req, res) {
 });
 
 restService.post("/userQuery", function(req, res) {
-  
+*/
   
   var speech;
   var action;
