@@ -38,7 +38,7 @@ restService.post("/userQuery", function(req, res) {
   var reqUrl;
   var movieList;
   var genresMovieList;
-  var nomeFilm, dataFilm, posterPath, generiFilm;
+  var nomeFilm, dataFilm, posterPath, generiFilm, dataFilm;
   var queryGenre;
   var i,j;
 
@@ -77,6 +77,7 @@ restService.post("/userQuery", function(req, res) {
             posterPath = "https://image.tmdb.org/t/p/w185"+ movieList.results[index].poster_path;
             genresMovieList = movieList.results[index].genre_ids;
             generiFilm = "";
+            dataFilm = movieList.results[index].release_date.split("-");
 
             //i generi vengono forniti dalle API come un id, si recuperano i generi dalla lista definita in questo doc
             for(i in genresMovieList){
@@ -98,7 +99,7 @@ restService.post("/userQuery", function(req, res) {
                 {
                   card:{
                     title: nomeFilm,
-                    subtitle: "Genere: "+generiFilm,
+                    subtitle: "Genere: "+generiFilm+"; \nData uscita: "+dataFilm[2]+"-"+dataFilm[1]+"-"+dataFilm[0],
                     imageUri: posterPath
                   }
                 },
@@ -114,13 +115,13 @@ restService.post("/userQuery", function(req, res) {
                     items: [
                       {
                         simpleResponse: {
-                          textToSpeech: "Potresti guardare il film "+nomeFilm
+                          textToSpeech: "Potresti guardare il film \""+nomeFilm+"\" del "+dataFilm[0]
                         }
                       },
                       {
                         basicCard: {
                           title: nomeFilm,
-                          subtitle: "Genere: "+generiFilm,
+                          subtitle: "Genere: "+generiFilm+"; \nData uscita: "+dataFilm[2]+"-"+dataFilm[1]+"-"+dataFilm[0],
                           image:{
                             url: posterPath,
                             accessibilityText: "Poster del film"
