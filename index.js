@@ -5,9 +5,13 @@ const bodyParser = require("body-parser");
 
 const restService = express();
 
+//api per chiamate al db online
 const APItmdb = "775245f5d713d40f4c3ed281f88e412b";
+
+//oggetto per le chiamate https REST
 const https = require("https");
 
+//codici id per i generi, come impostati sul DB
 const genresStuct =  [{"id": 28, "name": "Action"},{"id": 12, "name": "Adventure"}, {"id": 16, "name": "Animation"},{"id": 35, "name": "Comedy"},{"id": 80, "name": "Crime"}, 
     {"id": 99, "name": "Documentary"},{"id": 18, "name": "Drama"},{"id": 10751,"name": "Family"},{"id": 14,"name": "Fantasy"},{"id": 36,"name": "History" },{"id": 27,"name": "Horror"},
     {"id": 10402,"name": "Music"}, {"id": 9648,"name": "Mystery" },{"id": 10749,"name": "Romance"},{"id": 878,"name": "Science Fiction"},{"id": 10770,"name": "TV Movie"},
@@ -20,19 +24,10 @@ restService.use(
 );
 
 restService.use(bodyParser.json());
-/*
-restService.post("/echo", function(req, res) {
-  var speech =
-    req.body.queryResult &&
-    req.body.queryResult.parameters &&
-    req.body.queryResult.parameters.echoText
-      ? req.body.queryResult.parameters.echoText
-      : "Seems like some problem. Speak again.";
-  return res.json({
-    fulfillmentText: speech,
-    source: "moviehint-webhook"
-  });
-});*/
+
+/***************/
+//Servizio POST sul server, contattabile a /userQuery: questo servizio viene chiamato dagli intent dell'agente DialogFlow; comportamenti diversi sono identificati da un action diverso
+/***************/
 
 restService.post("/userQuery", function(req, res) {
   
@@ -52,28 +47,38 @@ restService.post("/userQuery", function(req, res) {
 
     switch(action){
 
+      //azione per ricevere un film completamente random
       case "get-a-random-movie": 
 
+        //i film sono ordinati per popolarità, la pagina e l'indice sono randomici (pagina fra le prime 1000)
         page = Math.floor(Math.random() * 999)+1;
-        console.log(page);
+
         reqUrl = encodeURI("https://api.themoviedb.org/3/discover/movie?api_key="+ APItmdb +"&language=it&sort_by=popularity.desc&include_adult=false&include_video=false&page="+page);
+
         https.get(reqUrl, (responseFromAPI) => {
           let completeResponse = '';
           responseFromAPI.on('data', (chunk) =>{
             completeResponse += chunk;
           });
           responseFromAPI.on('end', () =>{
-            
+            //una volta che i dati json sono arrivati tutti
+
+            //risultato della chiamata
             movieList = JSON.parse(completeResponse);
+
+            //estrazione indice casuale
             maxIndex = movieList.results.length -1;
             index = Math.floor(Math.random() * maxIndex);
             console.log("page "+page+", index "+index+" of tot "+maxIndex);
+
+            //estrazione dati film casuale
             nomeFilm = ""+ movieList.results[index].title;
             dataFilm = ""+ movieList.results[index].release_date;
             posterPath = "https://image.tmdb.org/t/p/w185"+ movieList.results[index].poster_path;
             genresMovieList = movieList.results[index].genre_ids;
             generiFilm = "";
 
+            //i generi vengono forniti dalle API come un id, si recuperano i generi dalla lista definita in questo doc
             for(i in genresMovieList){
               for(j in genresStuct){
                 if(genresMovieList[i] == genresStuct[j].id){
@@ -82,6 +87,8 @@ restService.post("/userQuery", function(req, res) {
               }
             } 
 
+
+            //messaggio di risposta all'agente DialogFlow
             return res.json({
               fulfillmentText: "Potresti guardare questo film",
               fulfillmentMessages: [
@@ -101,6 +108,7 @@ restService.post("/userQuery", function(req, res) {
               ],
               source: "moviehint-webhook",
               payload: {
+                //risposta per agente Google Assistent
                 google: {
                   richResponse: {
                     items: [
@@ -131,6 +139,8 @@ restService.post("/userQuery", function(req, res) {
             });
           });
         }, (error) => {
+
+          //errore di comunicazione con il DB
           speech = "Some error occurred";
           return res.json({
             fulfillmentText: speech,
@@ -139,18 +149,11 @@ restService.post("/userQuery", function(req, res) {
         });
         break;
 
+      //azione per ricevere un film random di un determinato genere
+
       case "get-a-genre-random-movie": 
 
-        /*if(req.body.queryResult.parameters && req.body.queryResult.parameters.movieGenre){
-          queryGenre = req.body.queryResult.parameters.movieGenre;
-          var q;
-          for(i in genresStuct){
-            if(genresStuct[i].name == queryGenre){
-              q = genresStuct[i].id;
-              break;
-            }
-          }
-        }*/
+        //si cerca il parametro movieGenre nella richiesta
         if(req.body.queryResult.parameters){
           if(req.body.queryResult.parameters.movieGenre){
             queryGenre = req.body.queryResult.parameters.movieGenre;
@@ -162,6 +165,8 @@ restService.post("/userQuery", function(req, res) {
               }
             }
           }else{
+
+            //se non viene trovato lo si cerca nei contesti
             if(req.body.queryResult.outputContexts){
               var contexts = req.body.queryResult.outputContexts;
               var c;
@@ -181,6 +186,8 @@ restService.post("/userQuery", function(req, res) {
             }
           }
         }
+
+        //estrazione random della pagina dei film in ordine di popolarità (essendoci molti meno film per genrere che i 1000 della chiamata random, per sicurezza ci limitiamo a 10 pagine)
         page = Math.floor(Math.random() * 9)+1;
         reqUrl = encodeURI("https://api.themoviedb.org/3/discover/movie?api_key="+ APItmdb +"&language=it&sort_by=popularity.desc&include_adult=false&include_video=false&page="+page+"&with_genres="+q);
         https.get(reqUrl, (responseFromAPI) => {
@@ -191,15 +198,20 @@ restService.post("/userQuery", function(req, res) {
           responseFromAPI.on('end', () =>{
             
             movieList = JSON.parse(completeResponse);
+
+            //estrazione indice casuale
             maxIndex = movieList.results.length -1;
             index = Math.floor(Math.random() * maxIndex);
             console.log("page "+page+", index "+index+" of tot "+maxIndex);
+
+            //estrazione dati film
             nomeFilm = ""+ movieList.results[index].title;
             dataFilm = ""+ movieList.results[index].release_date;
             posterPath = "https://image.tmdb.org/t/p/w185"+ movieList.results[index].poster_path;
             genresMovieList = movieList.results[index].genre_ids;
             generiFilm = "";
 
+            //i generi vengono forniti dalle API come un id, si recuperano i generi dalla lista definita in questo doc
             for(i in genresMovieList){
               for(j in genresStuct){
                 if(genresMovieList[i] == genresStuct[j].id){
@@ -208,6 +220,7 @@ restService.post("/userQuery", function(req, res) {
               }
             }                
 
+            //risposta JSON per agente DialogFlow
             return res.json({
               fulfillmentText: "Potresti guardare questo film",
               fulfillmentMessages: [
@@ -227,6 +240,7 @@ restService.post("/userQuery", function(req, res) {
               ],
               source: "moviehint-webhook",
               payload: {
+                //risposta per agente Google Assistant
                 google: {
                   richResponse: {
                     items: [
@@ -257,6 +271,8 @@ restService.post("/userQuery", function(req, res) {
             });
           });
         }, (error) => {
+
+          //errore nella chiamata
           speech = "Some error occurred";
           return res.json({
             fulfillmentText: speech,
@@ -266,7 +282,7 @@ restService.post("/userQuery", function(req, res) {
         break;
 
       
-
+      //in mancanza di azione (in teoria non viene chiamato mai, l'azione deve essere sempre definita dagli intent che comunicano con questo webhook)
       default: 
         speech = "Action unknown";
         return res.json({
@@ -278,6 +294,7 @@ restService.post("/userQuery", function(req, res) {
   }
 });
 
+//attivazione del server nodejs 
 restService.listen(process.env.PORT || 8000, function() {
   console.log("Server up and listening");
   console.log(genresStuct[2].name);
