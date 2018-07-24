@@ -166,7 +166,7 @@ restService.post("/userQuery", function(req, res) {
               var contexts = req.body.queryResult.outputContexts;
               var c;
               for(c=0; c<contexts.length; c++){
-                if(contexts[c].parameters.movieGenre){
+                if(contexts[c].parameters && contexts[c].parameters.movieGenre){    
                   queryGenre = contexts[c].parameters.movieGenre;
                   for(i in genresStuct){
                     if(genresStuct[i].name == queryGenre){
