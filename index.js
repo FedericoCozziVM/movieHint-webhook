@@ -20,7 +20,6 @@ restService.use(
 );
 
 restService.use(bodyParser.json());
-
 /*
 restService.post("/echo", function(req, res) {
   var speech =
@@ -33,10 +32,10 @@ restService.post("/echo", function(req, res) {
     fulfillmentText: speech,
     source: "moviehint-webhook"
   });
-});
+});*/
 
 restService.post("/userQuery", function(req, res) {
-*/
+  
   
   var speech;
   var action;
