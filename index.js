@@ -78,6 +78,7 @@ restService.post("/userQuery", function(req, res) {
             genresMovieList = movieList.results[index].genre_ids;
             generiFilm = "";
             dataFilm = movieList.results[index].release_date.split("-");
+            tramaFilm = movieList.results[index].overview;
 
             //i generi vengono forniti dalle API come un id, si recuperano i generi dalla lista definita in questo doc
             for(i in genresMovieList){
@@ -125,7 +126,8 @@ restService.post("/userQuery", function(req, res) {
                           image:{
                             url: posterPath,
                             accessibilityText: "Poster del film"
-                          }
+                          },
+                          formattedText: tramaFilm
                         }
                       },
                       {
@@ -212,6 +214,7 @@ restService.post("/userQuery", function(req, res) {
             genresMovieList = movieList.results[index].genre_ids;
             generiFilm = "";
             dataFilm = movieList.results[index].release_date.split("-");
+            tramaFilm = movieList.results[index].overview;
 
             //i generi vengono forniti dalle API come un id, si recuperano i generi dalla lista definita in questo doc
             for(i in genresMovieList){
@@ -258,7 +261,8 @@ restService.post("/userQuery", function(req, res) {
                           image:{
                             url: posterPath,
                             accessibilityText: "Poster del film"
-                          }
+                          },
+                          formattedText: tramaFilm
                         }
                       },
                       {
