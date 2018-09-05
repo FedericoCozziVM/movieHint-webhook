@@ -139,11 +139,14 @@ restService.post("/userQuery", function(req, res) {
                   }
                 },
                 custom: {
-                	title: nomeFilm,
-                	data: ""+dataFilm[2]+"-"+dataFilm[1]+"-"+dataFilm[0],
-                	poster: posterPath,
-                	genre: generiFilm,
-                	overview: tramaFilm,
+                	infoMovie: {
+                		title: nomeFilm,
+	                	data: ""+dataFilm[2]+"-"+dataFilm[1]+"-"+dataFilm[0],
+	                	poster: posterPath,
+	                	genre: generiFilm,
+	                	overview: tramaFilm
+                	}
+                	
                 }
               }
             });
@@ -281,11 +284,14 @@ restService.post("/userQuery", function(req, res) {
                   }
                 },
                 custom: {
-                	title: nomeFilm,
-                	data: ""+dataFilm[2]+"-"+dataFilm[1]+"-"+dataFilm[0],
-                	poster: posterPath,
-                	genre: generiFilm,
-                	overview: tramaFilm,
+                	infoMovie: {
+                		title: nomeFilm,
+	                	data: ""+dataFilm[2]+"-"+dataFilm[1]+"-"+dataFilm[0],
+	                	poster: posterPath,
+	                	genre: generiFilm,
+	                	overview: tramaFilm
+                	}
+                	
                 }
               }
             });
