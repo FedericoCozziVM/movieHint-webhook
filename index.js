@@ -459,7 +459,7 @@ restService.post("/userQuery", function(req, res) {
                             url: posterPath,
                             accessibilityText: "Poster del film"
                           },
-                          formattedText: tramaFilm
+                          formattedText: richText
                         }
                       },
                       {
