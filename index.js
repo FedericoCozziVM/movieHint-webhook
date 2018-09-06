@@ -255,7 +255,24 @@ restService.post("/userQuery", function(req, res) {
                   generiFilm += (genresStuct[j].name +" ");
                 }
               }
-            }                
+            }    
+
+            var oldContexts
+            if(req.body.queryResult.outputContexts){
+            	
+            	oldContexts = req.body.queryResult.outputContexts;
+
+            	//il primo obbiettivo è capire il numero di sessione
+            	var c = oldContexts[0].name;
+            	var s = c.split("/")[4]; //s è numero di sessione, per accedere al contesto giusto
+            	for(var p=0; p<oldContexts.length; p++){
+            		if(oldContexts[p].name == ("projects/moviehint-5e3db/agent/sessions/"+s+"/contexts/get-a-genre-random-movie-followup")){
+            			oldContexts[p]["parameters"]={"movieId": movieList.results[index].id};
+            		}
+            	}
+        		
+        		//console.log(oldContexts);
+            }             
 
             //risposta JSON per agente DialogFlow
             return res.json({
@@ -316,7 +333,8 @@ restService.post("/userQuery", function(req, res) {
                 	}
                 	
                 }
-              }
+              },
+              outputContexts : oldContexts
             });
           });
         }, (error) => {
