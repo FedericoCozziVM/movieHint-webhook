@@ -94,7 +94,9 @@ restService.post("/userQuery", function(req, res) {
             var oldContexts
             if(req.body.queryResult.outputContexts){
             	oldContexts = req.body.queryResult.outputContexts;
-        		oldContexts[0].parameters.idMovie = movieList.results[index].id;
+        		//oldContexts[0].parameters.idMovie = movieList.results[index].id;
+        		oldContexts[0]["parameters"]={"movieId": movieList.results[index].id};
+        		//console.log(oldContexts);
             } 
 
 
