@@ -38,7 +38,7 @@ restService.post("/userQuery", function(req, res) {
   var reqUrl;
   var movieList;
   var genresMovieList;
-  var nomeFilm, dataFilm, posterPath, generiFilm, dataFilm, tramaFilm;
+  var nomeFilm, dataFilm, posterPath, generiFilm, dataFilm, tramaFilm, nomeOriginale;
   var queryGenre;
   var i,j;
 
