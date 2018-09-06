@@ -424,10 +424,10 @@ restService.post("/userQuery", function(req, res) {
 
             //messaggio di risposta all'agente DialogFlow
             return res.json({
-              fulfillmentText: "Ecco a te maggiori informazioni sul film scelto",
+              fulfillmentText: "Sono spiacente, ma questa funzionalità non è al momento disponibile su questo supporto",
               fulfillmentMessages: [
                 {
-                  "text": {"text": ["Ecco a te maggiori informazioni sul film scelto"]}
+                  "text": {"text": ["Sono spiacente, ma questa funzionalità non è al momento disponibile su questo supporto"]}
                 },
                 {
                   card:{
@@ -437,7 +437,7 @@ restService.post("/userQuery", function(req, res) {
                   }
                 },
                 {
-                  "text": {"text": ["Fammi sapere se ti serve altro!"]}
+                  "text": {"text": ["Fammi sapere se vuoi che ti consigli altro!"]}
                 }
               ],
               source: "moviehint-webhook",
@@ -448,7 +448,7 @@ restService.post("/userQuery", function(req, res) {
                     items: [
                       {
                         simpleResponse: {
-                          textToSpeech: "Ecco maggiori informazioni sul film \""+nomeFilm+"\" del "+dataFilm[0]
+                          textToSpeech: "Sono spiacente, ma questa funzionalità non è al momento disponibile su questo supporto"
                         }
                       },
                       {
@@ -459,12 +459,12 @@ restService.post("/userQuery", function(req, res) {
                             url: posterPath,
                             accessibilityText: "Poster del film"
                           },
-                          formattedText: richText
+                          formattedText: tramaFilm
                         }
                       },
                       {
                         simpleResponse: {
-                          textToSpeech: "Fammi sapere se ti serve altro!"
+                          textToSpeech: "Fammi sapere se vuoi che ti consigli altro!"
                         }
                       }
                     ]
