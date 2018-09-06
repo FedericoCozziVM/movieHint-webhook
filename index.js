@@ -405,6 +405,23 @@ restService.post("/userQuery", function(req, res) {
 
             var richText = "Genere: "+generiFilm+"\nData uscita: "+dataFilm[2]+"-"+dataFilm[1]+"-"+dataFilm[0]+"\nTrama: "+tramaFilm+"\n"
 
+            var oldContexts
+            if(req.body.queryResult.outputContexts){
+            	
+            	oldContexts = req.body.queryResult.outputContexts;
+
+            	//il primo obbiettivo è capire il numero di sessione
+            	var c = oldContexts[0].name;
+            	var s = c.split("/")[4]; //s è numero di sessione, per accedere al contesto giusto
+            	for(var p=0; p<oldContexts.length; p++){
+            		if(oldContexts[p].name == ("projects/moviehint-5e3db/agent/sessions/"+s+"/contexts/movie-info")){
+            			oldContexts[p]["parameters"]={"movieId": movieList.results[index].id};
+            		}
+            	}
+        		
+        		//console.log(oldContexts);
+            } 
+            
             //messaggio di risposta all'agente DialogFlow
             return res.json({
               fulfillmentText: "Ecco a te maggiori informazioni sul film "+nomeFilm,
