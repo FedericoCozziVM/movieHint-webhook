@@ -88,6 +88,13 @@ restService.post("/userQuery", function(req, res) {
                   generiFilm += (genresStuct[j].name +" ");
                 }
               }
+            }
+
+            //inserimento id film nel contesto per future chiamate di maggior informazioni
+            var oldContexts
+            if(req.body.queryResult.outputContexts){
+            	oldContexts = req.body.queryResult.outputContexts;
+        		oldContexts[0].parameters.idMovie = movieList.results[index].id;
             } 
 
 
@@ -150,7 +157,8 @@ restService.post("/userQuery", function(req, res) {
                 	}
                 	
                 }
-              }
+              },
+              outputContexts : oldContexts
             });
           });
         }, (error) => {
