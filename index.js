@@ -424,10 +424,10 @@ restService.post("/userQuery", function(req, res) {
 
             //messaggio di risposta all'agente DialogFlow
             return res.json({
-              fulfillmentText: "Ecco a te maggiori informazioni sul film "+nomeFilm,
+              fulfillmentText: "Ecco a te maggiori informazioni sul film scelto",
               fulfillmentMessages: [
                 {
-                  "text": {"text": ["Ecco a te maggiori informazioni sul film "+nomeFilm]}
+                  "text": {"text": ["Ecco a te maggiori informazioni sul film scelto"]}
                 },
                 {
                   card:{
