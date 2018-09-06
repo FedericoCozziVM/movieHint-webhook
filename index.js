@@ -379,6 +379,7 @@ restService.post("/userQuery", function(req, res) {
             //una volta che i dati json sono arrivati tutti
 
             //risultato della chiamata
+            var movieInfos;
             movieInfos = JSON.parse(completeResponse);
 
             //estrazione dati film casuale
