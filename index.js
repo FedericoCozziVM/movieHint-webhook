@@ -348,6 +348,137 @@ restService.post("/userQuery", function(req, res) {
         });
         break;
 
+        case "get-more-info": 
+
+        //come prima cosa si estrae dal contesto l'id del film in questione   
+        var movieId;
+
+        if(req.body.queryResult.outputContexts){
+          var contexts = req.body.queryResult.outputContexts;
+          var c;
+          for(c=0; c<contexts.length; c++){
+            if(contexts[c].parameters && contexts[c].parameters.movieId){    
+              movieId = contexts[c].parameters.movieId;
+              break;
+            }
+          }
+        }
+          
+        
+
+        //Query per avere maggiori informazioni sul film in questione
+
+        reqUrl = encodeURI("https://api.themoviedb.org/3/movie/"+movieId+"?api_key="+ APItmdb +"&language=it&append_to_response=videos");
+
+        https.get(reqUrl, (responseFromAPI) => {
+          let completeResponse = '';
+          responseFromAPI.on('data', (chunk) =>{
+            completeResponse += chunk;
+          });
+          responseFromAPI.on('end', () =>{
+            //una volta che i dati json sono arrivati tutti
+
+            //risultato della chiamata
+            movieInfos = JSON.parse(completeResponse);
+
+            //estrazione dati film casuale
+            
+            nomeFilm = ""+ movieInfos.title;
+            posterPath = "https://image.tmdb.org/t/p/w185"+ movieInfos.poster_path;
+            genresMovieList = movieInfos.genre_ids;
+            generiFilm = "";
+            dataFilm = movieInfos.release_date.split("-");
+            tramaFilm = movieInfos.overview;
+            nomeOriginale = movieInfos.original_title;
+			
+
+            //i generi vengono forniti dalle API come un id, si recuperano i generi dalla lista definita in questo doc
+            for(i in genresMovieList){
+              for(j in genresStuct){
+                if(genresMovieList[i] == genresStuct[j].id){
+                  generiFilm += (genresStuct[j].name +" ");
+                }
+              }
+            }
+
+
+            var richText = "Genere: "+generiFilm+"\nData uscita: "+dataFilm[2]+"-"+dataFilm[1]+"-"+dataFilm[0]+"\nTrama: "+tramaFilm+"\n"
+
+            //messaggio di risposta all'agente DialogFlow
+            return res.json({
+              fulfillmentText: "Ecco a te maggiori informazioni sul film "+nomeFilm,
+              fulfillmentMessages: [
+                {
+                  "text": {"text": ["Ecco a te maggiori informazioni sul film "+nomeFilm]}
+                },
+                {
+                  card:{
+                    title: nomeFilm,
+                    subtitle: richText,
+                    imageUri: posterPath
+                  }
+                },
+                {
+                  "text": {"text": ["Fammi sapere se ti serve altro!"]}
+                }
+              ],
+              source: "moviehint-webhook",
+              payload: {
+                //risposta per agente Google Assistent
+                google: {
+                  richResponse: {
+                    items: [
+                      {
+                        simpleResponse: {
+                          textToSpeech: "Ecco maggiori informazioni sul film \""+nomeFilm+"\" del "+dataFilm[0]
+                        }
+                      },
+                      {
+                        basicCard: {
+                          title: nomeFilm,
+                          subtitle: "Genere: "+generiFilm+"; \nData uscita: "+dataFilm[2]+"-"+dataFilm[1]+"-"+dataFilm[0],
+                          image:{
+                            url: posterPath,
+                            accessibilityText: "Poster del film"
+                          },
+                          formattedText: tramaFilm
+                        }
+                      },
+                      {
+                        simpleResponse: {
+                          textToSpeech: "Fammi sapere se ti serve altro!"
+                        }
+                      }
+                    ]
+                  }
+                },
+                custom: {
+                	infoMovie: {
+                		title: nomeFilm,
+	                	data: ""+dataFilm[2]+"-"+dataFilm[1]+"-"+dataFilm[0],
+	                	poster: posterPath,
+	                	genre: generiFilm,
+	                	overview: tramaFilm,
+	                	originalTitle: nomeOriginale
+                	},
+                	advancedInfoMovie: movieInfos
+                	
+                }
+              },
+              outputContexts : oldContexts
+            });
+          });
+        }, (error) => {
+
+          //errore di comunicazione con il DB
+          speech = "Some error occurred";
+          return res.json({
+            fulfillmentText: speech,
+            source: "moviehint-webhook"
+          });
+        });
+        break;
+
       
       //in mancanza di azione (in teoria non viene chiamato mai, l'azione deve essere sempre definita dagli intent che comunicano con questo webhook)
       default: 
