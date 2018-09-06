@@ -100,7 +100,7 @@ restService.post("/userQuery", function(req, res) {
             	var c = oldContexts[0].name;
             	var s = c.split("/")[4]; //s è numero di sessione, per accedere al contesto giusto
             	for(var p=0; p<oldContexts.length; p++){
-            		if(oldContexts[p].name == ("projects/moviehint-5e3db/agent/sessions/"+s+"/contexts/get-a-random-movie-followup")){
+            		if(oldContexts[p].name == ("projects/moviehint-5e3db/agent/sessions/"+s+"/contexts/movie-info")){
             			oldContexts[p]["parameters"]={"movieId": movieList.results[index].id};
             		}
             	}
@@ -266,7 +266,7 @@ restService.post("/userQuery", function(req, res) {
             	var c = oldContexts[0].name;
             	var s = c.split("/")[4]; //s è numero di sessione, per accedere al contesto giusto
             	for(var p=0; p<oldContexts.length; p++){
-            		if(oldContexts[p].name == ("projects/moviehint-5e3db/agent/sessions/"+s+"/contexts/get-a-genre-random-movie-followup")){
+            		if(oldContexts[p].name == ("projects/moviehint-5e3db/agent/sessions/"+s+"/contexts/movie-info")){
             			oldContexts[p]["parameters"]={"movieId": movieList.results[index].id};
             		}
             	}
