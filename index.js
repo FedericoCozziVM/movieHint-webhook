@@ -221,6 +221,40 @@ restService.post("/userQuery", function(req, res) {
           }
         }
 
+        if(typeof q == 'undefined'){
+        	//console.log("q: "+q);
+        	//il nome del genere non è stato trovato
+        	//per evitare il crash del sistema rispondiamo in maniera negativa alla chaiamata
+
+        	return res.json({
+        		fulfillmentText: "Mi spiace, ma so come aiutarti. Vuoi riprovare?",
+              fulfillmentMessages: [
+                {
+                  "text": {"text": ["Mi spiace, ma so come aiutarti."]}
+                },
+                {
+                  "text": {"text": ["Vuoi riprovare?"]}
+                }
+              ],
+              source: "moviehint-webhook",
+              payload: {
+                //risposta per agente Google Assistant
+                google: {
+                  richResponse: {
+                    items: [
+                      {
+                        simpleResponse: {
+                          textToSpeech: "Mi spiace, ma so come aiutarti. Vuoi riprovare?"
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              outputContexts : []
+        	});
+    	}	
+
         //estrazione random della pagina dei film in ordine di popolarità (essendoci molti meno film per genrere che i 1000 della chiamata random, per sicurezza ci limitiamo a 10 pagine)
         page = Math.floor(Math.random() * 9)+1;
         reqUrl = encodeURI("https://api.themoviedb.org/3/discover/movie?api_key="+ APItmdb +"&language=it&sort_by=popularity.desc&include_adult=false&include_video=false&page="+page+"&with_genres="+q);
