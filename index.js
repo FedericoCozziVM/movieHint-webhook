@@ -232,9 +232,6 @@ restService.post("/userQuery", function(req, res) {
             	oldContexts = req.body.queryResult.outputContexts;
             	//cancello tutti i contesti esistenti
             	for(var p=0; p<oldContexts.length; p++){
-            		if(oldContexts[p].name == ("projects/moviehint-5e3db/agent/sessions/"+s+"/contexts/movie-info")){
-            			oldContexts[p]["parameters"]={"movieId": movieList.results[index].id};
-            		}
             		oldContexts[p].lifespanCount = 0;
             	}
             }
