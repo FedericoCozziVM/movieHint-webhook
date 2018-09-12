@@ -226,6 +226,19 @@ restService.post("/userQuery", function(req, res) {
         	//il nome del genere non è stato trovato
         	//per evitare il crash del sistema rispondiamo in maniera negativa alla chaiamata
 
+        	var oldContexts;
+            if(req.body.queryResult.outputContexts){
+            	
+            	oldContexts = req.body.queryResult.outputContexts;
+            	//cancello tutti i contesti esistenti
+            	for(var p=0; p<oldContexts.length; p++){
+            		if(oldContexts[p].name == ("projects/moviehint-5e3db/agent/sessions/"+s+"/contexts/movie-info")){
+            			oldContexts[p]["parameters"]={"movieId": movieList.results[index].id};
+            		}
+            		oldContexts[p].lifespanCount = 0;
+            	}
+            }
+
         	return res.json({
         		fulfillmentText: "Mi spiace, ma so come aiutarti. Vuoi riprovare?",
               fulfillmentMessages: [
@@ -251,7 +264,7 @@ restService.post("/userQuery", function(req, res) {
                   }
                 }
               },
-              outputContexts : []
+              outputContexts : oldContexts
         	});
     	}	
 
